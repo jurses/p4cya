@@ -26,7 +26,7 @@ namespace CYA{
 		finiteStateIDSet_t funcTrans(const char, int);
 		finiteStateIDSet_t funcTrans(const char, finiteStateIDSet_t);
 		void organizeState(void);
-		State* obtActualState(int);
+		State obtActualState(int);
 		std::string str2analyze_;
 		std::ostream& showTrace(std::ostream&);
 		bool checkAcceptance(finiteStateIDSet_t);

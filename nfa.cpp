@@ -34,15 +34,15 @@ namespace CYA{
 		// conseguir los estados importantes y los de muerte
 	}
 
-	State* Nfa::obtActualState(int q){
-		for(finiteStateSet_t::iterator it = Q_.begin; it != Q_.end(); it++)
-			if(it->getID == q)
-				return &*it;
+	State Nfa::obtActualState(int q){
+		for(finiteStateSet_t::iterator it = Q_.begin(); it != Q_.end(); it++)
+			if(it->getID() == q)
+				return *it;
 	}
 
 	finiteStateIDSet_t Nfa::funcTrans(const char t, int q){
-		State *actualState = obtActualState(q);
-		return actualState->getNextS(t);
+		State actualState = obtActualState(q);
+		return actualState.getNextS(t);
 	}
 
 	finiteStateIDSet_t Nfa::funcTrans(const char t, finiteStateIDSet_t qStates){
@@ -55,15 +55,14 @@ namespace CYA{
 	}
 
 	std::ostream& Nfa::showTrace(std::ostream& os){
-		os << 
 		return os;
 	}
 
 	bool Nfa::checkAcceptance(finiteStateIDSet_t qStates){
-		State *q;
+		State q;
 		for(finiteStateIDSet_t::iterator it = qStates.begin(); it != qStates.end(); it++){
 			q = obtActualState(*it);
-			if(q->isAccepted())
+			if(q.isAccepted())
 				return true;
 		}
 
@@ -71,10 +70,10 @@ namespace CYA{
 	}
 
 	void Nfa::analyze(int& i, int qID, bool& accepted){
-		State *q = obtActualState(qID);
+		State q = obtActualState(qID);
 		while(i < str2analyze_.size() && i >=0){
-			for(int j = 0; j < q->nTrans(str2analyze_[i]); j++){
-				finiteStateIDSet_t x = q->getNextS(str2analyze_[i]);
+			for(int j = 0; j < q.nTrans(str2analyze_[i]); j++){
+				finiteStateIDSet_t x = q.getNextS(str2analyze_[i]);
 				if(x.empty()){
 					i--;
 					break;
@@ -84,8 +83,8 @@ namespace CYA{
 
 				if(i == str2analyze_.size()){
 					for(finiteStateIDSet_t::iterator it = x.begin(); it != x.end(); it++){
-						State *qA = obtActualState(*it);
-						if(qA->isAccepted())
+						State qA = obtActualState(*it);
+						if(qA.isAccepted())
 							accepted = true;
 							return;
 					}
@@ -94,18 +93,18 @@ namespace CYA{
 				}
 				else
 					for(finiteStateIDSet_t::iterator it = x.begin(); it != x.end(); it++)
-						analyze(i, obtActualState(*it));
+						analyze(i, obtActualState(*it), accepted);
 			}
 		}
 	}
 
 	bool Nfa::analyze(void){
 		int i = 0;
-		State *q = obtActualState(initState_);
+		State q = obtActualState(initState_);
 		bool accepted;
 		while(i < str2analyze_.size() && i >=0){
-			for(int j = 0; j < q->nTrans(str2analyze_[i]); j++){
-				finiteStateIDSet_t x = q->getNextS(str2analyze_[i]);
+			for(int j = 0; j < q.nTrans(str2analyze_[i]); j++){
+				finiteStateIDSet_t x = q.getNextS(str2analyze_[i]);
 				if(x.empty()){
 					i--;
 					break;
@@ -115,9 +114,9 @@ namespace CYA{
 
 				if(i == str2analyze_.size()){
 					for(finiteStateIDSet_t::iterator it = x.begin(); it != x.end(); it++){
-						State *qA = obtActualState(*it);
-						if(qA->isAccepted())
-							return qA->isAccepted();
+						State qA = obtActualState(*it);
+						if(qA.isAccepted())
+							return qA.isAccepted();
 					}
 					return false;
 				}

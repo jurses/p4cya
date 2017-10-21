@@ -6,7 +6,6 @@
 #include <ostream>
 #include <cassert>
 
-class CYA::State;
 typedef std::set<int> finiteStateIDSet_t;
 typedef std::map<char, finiteStateIDSet_t> adjacency_t;
 
@@ -18,6 +17,7 @@ namespace CYA{
 		adjacency_t tupleAdj;
 	public:
 		State();
+		State(const State&);
 		void setID(int);
 		int getID(void)const;
 		bool operator<(const State&)const;
@@ -27,7 +27,8 @@ namespace CYA{
 		bool isAccepted(void)const;
 		int nTrans(const char)const;
 		int obtState(const char, int)const;
-		operator int();
+		//operator int();
+		State& operator=(const State&);
 	};
 }
 

@@ -9,9 +9,22 @@ namespace CYA{
 	id_(-1),
 	acceptance_(false)
 	{}
+
+	State& State::operator=(const State& q){
+		id_ = q.id_;
+		acceptance_ = q.acceptance_;
+		tupleAdj = q.tupleAdj;
+		return *this;
+	}
 	
 	void State::setAdj(char t, int nQ){
 		tupleAdj[t].insert(nQ);
+	}
+
+	State::State(const State& q){
+		id_ = q.id_;
+		acceptance_ = q.acceptance_;
+		tupleAdj = q.tupleAdj;
 	}
 
 	int State::getID(void)const{
@@ -35,6 +48,6 @@ namespace CYA{
 	}
 
 	int State::nTrans(const char t)const{
-		return tupleAdj[t].size();
+		return tupleAdj.at(t).size();
 	}
 }
