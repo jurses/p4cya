@@ -1,17 +1,17 @@
 #include "state.hpp"
 
+//class CYA::State;
+typedef std::set<int> finiteStateIDSet_t;
+typedef std::map<char, finiteStateIDSet_t> adjacency_t;
+
 namespace CYA{
 	State::State():
 	id_(-1),
 	acceptance_(false)
 	{}
 	
-	void State::setAdj(char t, int q){
-		adjacency_[t] = q;
-	}
-
-	int State::getNextS(const char t)const{
-		return adjacency_.at(t);
+	void State::setAdj(char t, int nQ){
+		tupleAdj[t].insert(nQ);
 	}
 
 	int State::getID(void)const{
@@ -26,7 +26,15 @@ namespace CYA{
 		id_ = id;
 	}
 
-	State::operator int(){
-		return id_;
+	bool State::isAccepted(void)const{
+		return acceptance_;
+	}
+
+	finiteStateIDSet_t State::getNextS(const char t)const{
+		return tupleAdj.at(t);
+	}
+
+	int State::nTrans(const char t)const{
+		return tupleAdj[t].size();
 	}
 }
