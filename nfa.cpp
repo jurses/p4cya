@@ -5,9 +5,9 @@ typedef std::map<char, finiteStateIDSet_t> adjacency_t;
 
 namespace CYA{
 	Nfa::Nfa(std::ifstream& ifs){
-		int totalStates;
-		ifs >> totalStates;
+		ifs >> totalStates_;
 		ifs >> initState_;
+		std::cout << totalStates_ << ", " << initState_ << std::endl;
 		for(int i = 0; i < totalStates_; i++){
 			bool acceptance;
 			int state, nStates;
@@ -43,10 +43,6 @@ namespace CYA{
 	finiteStateIDSet_t Nfa::funcTrans(const char t, int q){
 		State actualState = obtActualState(q);
 		return actualState.getNextS(t);
-	}
-
-	finiteStateIDSet_t Nfa::funcTrans(const char t, finiteStateIDSet_t qStates){
-		
 	}
 
 	std::istream& Nfa::putString(std::istream& is){
@@ -93,7 +89,7 @@ namespace CYA{
 				}
 				else
 					for(finiteStateIDSet_t::iterator it = x.begin(); it != x.end(); it++)
-						analyze(i, obtActualState(*it), accepted);
+						analyze(i, *it, accepted);
 			}
 		}
 	}
@@ -122,10 +118,8 @@ namespace CYA{
 				}
 				else
 					for(finiteStateIDSet_t::iterator it = x.begin(); it != x.end(); it++)
-						analyze(i, obtActualState(*it), accepted);
+						analyze(i, *it, accepted);
 			}
 		}
 	}
-
-
 }

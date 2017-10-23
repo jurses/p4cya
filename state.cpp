@@ -1,6 +1,6 @@
 #include "state.hpp"
+#include <iostream>
 
-//class CYA::State;
 typedef std::set<int> finiteStateIDSet_t;
 typedef std::map<char, finiteStateIDSet_t> adjacency_t;
 
@@ -18,7 +18,18 @@ namespace CYA{
 	}
 	
 	void State::setAdj(char t, int nQ){
-		tupleAdj[t].insert(nQ);
+		 for(adjacency_t::iterator it = tupleAdj.begin(); it != tupleAdj.end(); it++){
+			 if(t == it->first){
+				 it->second.insert(nQ);
+				 return;
+			 }
+		 }
+		 finiteStateIDSet_t aux;
+		 pairCS_t pairAux;
+		 aux.insert(nQ);
+		 pairAux.first = t;
+		 pairAux.second = aux;
+		 tupleAdj.insert(pairAux);
 	}
 
 	State::State(const State& q){
@@ -49,5 +60,9 @@ namespace CYA{
 
 	int State::nTrans(const char t)const{
 		return tupleAdj.at(t).size();
+	}
+
+	void State::setAcceptance(bool acceptance){
+		acceptance_ = acceptance;
 	}
 }

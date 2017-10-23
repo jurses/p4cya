@@ -5,9 +5,12 @@
 #include <set>
 #include <ostream>
 #include <cassert>
+#include <utility>
+
 
 typedef std::set<int> finiteStateIDSet_t;
-typedef std::map<char, finiteStateIDSet_t> adjacency_t;
+typedef std::pair<char, finiteStateIDSet_t> pairCS_t;
+typedef std::set<pairCS_t> adjacency_t;
 
 namespace CYA{
 	class State{
@@ -27,7 +30,7 @@ namespace CYA{
 		bool isAccepted(void)const;
 		int nTrans(const char)const;
 		int obtState(const char, int)const;
-		//operator int();
+		void resize(int);
 		State& operator=(const State&);
 	};
 }
